@@ -69,9 +69,9 @@ router.post("/login", (req, res) => {
 
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        const payload = { id: user.id, name: user.name };
+        const payload = { id: user.id, name: user.name }; // set id and name equal to the user that was found by email
 
-        jwt.sign(
+        jwt.sign( // 
           payload,
           keys.secretOrKey,
           // Tell the key to expire in one hour
@@ -102,4 +102,13 @@ router.get(
   }
 );
 
-module.exports = router;
+router.get('/users', (req, res) => {
+  User.find() 
+    .then(users => res.json(users))
+    .catch(err =>
+      res.status(404).json({ nousersfound: 'No users :(' }
+      )
+    );
+});
+
+module.exports = router; 
